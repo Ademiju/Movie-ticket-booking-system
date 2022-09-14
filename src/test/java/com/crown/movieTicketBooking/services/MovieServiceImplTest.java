@@ -1,0 +1,103 @@
+package com.crown.movieTicketBooking.services;
+
+import com.crown.movieTicketBooking.datas.models.Cinema;
+import com.crown.movieTicketBooking.datas.models.Movie;
+import com.crown.movieTicketBooking.dtos.requests.CinemaRequest;
+import com.crown.movieTicketBooking.dtos.requests.MovieRequest;
+import com.crown.movieTicketBooking.dtos.responses.CinemaResponse;
+import com.crown.movieTicketBooking.exceptions.MovieTicketBookingException;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
+
+import java.util.List;
+
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.junit.jupiter.api.Assertions.*;
+
+@SpringBootTest
+class MovieServiceImplTest {
+
+    @Autowired
+    MovieService movieService;
+    @Autowired
+    CinemaService cinemaService;
+
+    MovieRequest movieRequest;
+    MovieRequest movieRequest2;
+    Movie movie;
+    Movie movie2;
+
+
+
+    @BeforeEach
+    void setUp(){
+         movieRequest = MovieRequest.builder().title("Coming to America")
+                 .genres("Thriller,Comedy").languages("English,French,Spanish").build();
+         movieRequest2 = MovieRequest.builder().title("Blood sisters")
+                 .genres("Drama,Thriller,Action").languages("English").build();
+
+         movie = movieService.createMovie(movieRequest);
+         movie2 = movieService.createMovie(movieRequest2);
+
+    }
+
+    @Test
+    void movieCanBeCreated(){
+        assertEquals("coming to america", movie.getTitle());
+        assertEquals("blood sisters", movie2.getTitle());
+
+        assertEquals(2, movie.getGenre().size());
+        assertEquals(3, movie2.getGenre().size());
+
+    }
+    @Test
+    void createMovieThatAlreadyExistThrowsException(){
+        assertThatThrownBy(()->movieService.createMovie(movieRequest))
+                .isInstanceOf(MovieTicketBookingException.class)
+                .hasMessage("Movie already exist");
+    }
+
+
+    @Test
+    void findMovieByTitleTest(){
+        Movie found = movieService.findMovieByTitle("Coming to America");
+        assertEquals("coming to america", found.getTitle());
+    }
+
+    @Test
+    void findMovieByGenreTest(){
+        List <Movie> thrillerMovies = movieService.findMovieByGenre("Thriller");
+        List <Movie> dramaMovies = movieService.findMovieByGenre("drama");
+        assertEquals(2, thrillerMovies.size());
+        assertEquals(1,dramaMovies.size());
+
+    }
+
+    @Test
+    void findMovieByLanguageTest(){
+        List<Movie> movies = movieService.findMovieByLanguage("english");
+        assertEquals(2, movies.size());
+    }
+
+    @Test
+    void findMovieByCityTest(){
+//        cinemaService.createCinema(cinemaRequest);
+//
+//        cinemaService.addMoviesToCinema(movieRequest);
+//        cinemaService.addMoviesToCinema(movieRequest2);
+//        cinemaService.addMoviesToCinema(movieRequest3);
+//        List<List<Movie>> movies = movieService.findMovieByCity("abuja");
+//
+//        assertEquals(2, movies.size());
+    }
+
+
+    @AfterEach
+    void tearDown(){
+        movieService.deleteAll();
+        cinemaService.deleteAll();
+    }
+}
