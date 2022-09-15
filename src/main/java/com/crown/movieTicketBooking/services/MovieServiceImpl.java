@@ -66,8 +66,8 @@ public class MovieServiceImpl implements MovieService{
     }
 
     @Override
-    public Movie update(Movie movie) {
-        Optional<Movie> optionalMovie = movieRepository.findMovieByTitle(movie.getTitle().toLowerCase());
+    public Movie update(String movieTitle) {
+        Optional<Movie> optionalMovie = movieRepository.findMovieByTitle(movieTitle.toLowerCase());
         if (optionalMovie.isEmpty())throw new MovieTicketBookingException("Movie does not exist!");
         Movie foundMovie = optionalMovie.get();
        Movie mappedMovie = modelMapper.map(foundMovie,Movie.class);

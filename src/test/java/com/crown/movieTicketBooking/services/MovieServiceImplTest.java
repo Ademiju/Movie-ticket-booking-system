@@ -135,7 +135,7 @@ class MovieServiceImplTest {
 
         movie.getCinemaList().add(cinema1);
         movie.getCinemaList().add(cinema2);
-        Movie updatedMovie = movieService.update(movie);
+        Movie updatedMovie = movieService.update(movie.getTitle());
         MovieInfoResponse response= movieService.displayCinemasAndShows(updatedMovie.getTitle());
         assertEquals(2, movie.getCinemaList().size() );
     }

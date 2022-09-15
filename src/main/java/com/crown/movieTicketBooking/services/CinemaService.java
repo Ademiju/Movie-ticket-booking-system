@@ -1,11 +1,9 @@
 package com.crown.movieTicketBooking.services;
 
 import com.crown.movieTicketBooking.datas.models.Booking;
-import com.crown.movieTicketBooking.dtos.requests.AddHallRequest;
-import com.crown.movieTicketBooking.dtos.requests.BookingRequest;
-import com.crown.movieTicketBooking.dtos.requests.CreateCinemaRequest;
+import com.crown.movieTicketBooking.datas.models.Movie;
+import com.crown.movieTicketBooking.dtos.requests.*;
 
-import com.crown.movieTicketBooking.dtos.requests.CreateShowRequest;
 import com.crown.movieTicketBooking.dtos.responses.AddHallResponse;
 import com.crown.movieTicketBooking.dtos.responses.CinemaResponse;
 import com.crown.movieTicketBooking.dtos.responses.CreateShowResponse;

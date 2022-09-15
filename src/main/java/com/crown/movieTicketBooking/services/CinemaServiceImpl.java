@@ -81,14 +81,14 @@ public class CinemaServiceImpl implements CinemaService {
         return cinemaRepository.findById(cinemaId).get().getHallCount();
     }
 
+
     @Override
     public CreateShowResponse createShow(CreateShowRequest createShowRequest) {
         Cinema cinema = cinemaRepository.findById(createShowRequest.getCinemaId()).orElseThrow(()-> new MovieTicketBookingException("Cinema not found!"));
         CinemaHall hall = Arrays.stream(cinema.getCinemaHalls()).
                 filter(x-> x.getName().equals(createShowRequest.getHallName())).findFirst().
                 orElseThrow(()-> new MovieTicketBookingException("Hall name not found!"));
-
-        Movie savedMovie = buildMovieRequest(createShowRequest);
+        Movie savedMovie = movieService.findMovieByTitle(createShowRequest.getMovieTitle());
         Show createdShow = buildShowRequest(createShowRequest, hall, savedMovie);
         cinema.getShowTimes().add(createdShow);
         cinemaRepository.save(cinema);
@@ -96,7 +96,6 @@ public class CinemaServiceImpl implements CinemaService {
                 .message("Show successfully created!")
                 .build();
     }
-
     @Override
     public Booking buyMovieTicket(BookingRequest request) {
         return bookingService.bookTicket(request);
@@ -114,14 +113,14 @@ public class CinemaServiceImpl implements CinemaService {
         return showService.createShow(showRequest);
     }
 
-    private Movie buildMovieRequest(CreateShowRequest createShowRequest) {
-        MovieRequest movieRequest = MovieRequest.builder()
-                .title(createShowRequest.getMovieTitle())
-                .genres(createShowRequest.getGenres())
-                .languages(createShowRequest.getLanguages())
-                .build();
-        return movieService.createMovie(movieRequest);
-    }
+//    private Movie buildMovieRequest(CreateShowRequest createShowRequest) {
+//        MovieRequest movieRequest = MovieRequest.builder()
+//                .title(createShowRequest.getMovieTitle())
+//                .genres(createShowRequest.getGenres())
+//                .languages(createShowRequest.getLanguages())
+//                .build();
+//        return movieService.createMovie(movieRequest);
+//    }
 
     @Override
     public void deleteAll() {

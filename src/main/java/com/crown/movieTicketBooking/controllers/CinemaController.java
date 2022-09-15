@@ -48,7 +48,7 @@ public class CinemaController {
 
     @PostMapping("/create-show/")
 
-    public ResponseEntity<?> createShow(CreateShowRequest createShowRequest) {
+    public ResponseEntity<?> createShow(@RequestBody CreateShowRequest createShowRequest) {
         try {
             return new ResponseEntity<>(cinemaService.createShow(createShowRequest), HttpStatus.CREATED);
         } catch (MovieTicketBookingException error) {
@@ -58,7 +58,7 @@ public class CinemaController {
 
     @PostMapping("/buy-ticket/")
 
-    public ResponseEntity<?> buyMovieTicket(BookingRequest request) {
+    public ResponseEntity<?> buyMovieTicket(@RequestBody BookingRequest request) {
         try {
             return new ResponseEntity<>(cinemaService.buyMovieTicket(request), HttpStatus.CREATED);
         } catch (MovieTicketBookingException error) {

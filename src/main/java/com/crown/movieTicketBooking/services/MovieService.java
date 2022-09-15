@@ -13,7 +13,7 @@ public interface MovieService {
     List<Movie> findMovieByLanguage(String language);
     List<Movie> findMovieByCity(String city);
 
-    Movie update(Movie movie);
+    Movie update(String movieTitle);
 
     void deleteAll();
 

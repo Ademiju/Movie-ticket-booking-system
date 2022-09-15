@@ -61,8 +61,6 @@ void testThatCinemaCanAddShow(){
     cinemaService.addViewingHall(request);
     CreateShowRequest createShowRequest = CreateShowRequest.builder()
             .cinemaId(response.getCinemaId())
-            .genres("Tragedy,comedy,action")
-            .languages("english, spanish, french")
             .date("2002-07-09")
             .startTime("13:00:00")
             .endTime("15:30:00")
@@ -80,8 +78,6 @@ void testThatCinemaCanAddShow(){
         cinemaService.addViewingHall(request);
         CreateShowRequest createShowRequest = CreateShowRequest.builder()
                 .cinemaId(response.getCinemaId())
-                .genres("Tragedy,comedy,action")
-                .languages("english, spanish, french")
                 .date("2002-07-09")
                 .startTime("13:00:00")
                 .endTime("15:30:00")

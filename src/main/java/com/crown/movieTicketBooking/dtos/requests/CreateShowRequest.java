@@ -13,8 +13,6 @@ import java.math.BigDecimal;
 @Builder
 public class CreateShowRequest {
     private String cinemaId;
-    private String genres;
-    private String languages;
     private String movieTitle;
     private String startTime;
     private String endTime;
