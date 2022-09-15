@@ -5,8 +5,6 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.Id;
 
-import java.util.List;
-
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
@@ -15,7 +13,12 @@ public class CinemaHall {
     private String id;
     private String name;
     private int capacity;
-    private Seat seat;
-    private List<Show> showList;
+    private boolean[] seats;
+    private int occupiedSeats;
 
+    public CinemaHall(String name, int capacity) {
+        this.name = name;
+        this.capacity = capacity;
+        seats = new boolean[capacity];
+    }
 }

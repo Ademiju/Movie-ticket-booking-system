@@ -2,9 +2,11 @@ package com.crown.movieTicketBooking.services;
 
 import com.crown.movieTicketBooking.datas.models.Cinema;
 import com.crown.movieTicketBooking.datas.models.Movie;
-import com.crown.movieTicketBooking.dtos.requests.CinemaRequest;
+import com.crown.movieTicketBooking.datas.models.Show;
+import com.crown.movieTicketBooking.dtos.requests.CreateCinemaRequest;
 import com.crown.movieTicketBooking.dtos.requests.MovieRequest;
 import com.crown.movieTicketBooking.dtos.responses.CinemaResponse;
+import com.crown.movieTicketBooking.dtos.responses.MovieInfoResponse;
 import com.crown.movieTicketBooking.exceptions.MovieTicketBookingException;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -12,6 +14,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
@@ -94,7 +97,48 @@ class MovieServiceImplTest {
 //        assertEquals(2, movies.size());
     }
 
+    @Test
+    void  testThatCinemasShowingMovieCanBeViewed(){
+        CreateCinemaRequest cinemaRequest = CreateCinemaRequest.builder().name("360Views").city("Lagos").numberOfViewingHalls(3).build();
+        CinemaResponse response1 = cinemaService.createCinema(cinemaRequest);
 
+        Show show1 = Show.builder()
+                .movie(movie)
+                .build();
+        List<Show > shows = new ArrayList<>();
+        shows.add(show1);
+
+        Cinema cinema1 = Cinema.builder()
+                .id(response1.getCinemaId())
+                .name(cinemaRequest.getName())
+                .city(cinemaRequest.getCity())
+                .showTimes(shows)
+                .numberOfViewingHalls(cinemaRequest.getNumberOfViewingHalls())
+                .build();
+        CreateCinemaRequest cinemaRequest1 = CreateCinemaRequest.builder().name("Silverbird").city("Lagos").numberOfViewingHalls(3).build();
+        CinemaResponse response2 = cinemaService.createCinema(cinemaRequest1);
+
+        Show show2 = Show.builder()
+                .movie(movie)
+                .build();
+        List<Show > shows2 = new ArrayList<>();
+        shows.add(show2);
+
+        Cinema cinema2 = Cinema.builder()
+                .id(response2.getCinemaId())
+                .name(cinemaRequest1.getName())
+                .city(cinemaRequest1.getCity())
+                .showTimes(shows2)
+                .numberOfViewingHalls(cinemaRequest1.getNumberOfViewingHalls())
+                .build();
+        cinema2.getShowTimes().add(show2);
+
+        movie.getCinemaList().add(cinema1);
+        movie.getCinemaList().add(cinema2);
+        Movie updatedMovie = movieService.update(movie);
+        MovieInfoResponse response= movieService.displayCinemasAndShows(updatedMovie.getTitle());
+        assertEquals(2, movie.getCinemaList().size() );
+    }
     @AfterEach
     void tearDown(){
         movieService.deleteAll();

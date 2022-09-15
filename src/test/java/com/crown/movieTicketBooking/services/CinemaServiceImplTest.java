@@ -1,18 +1,15 @@
 package com.crown.movieTicketBooking.services;
 
-import com.crown.movieTicketBooking.datas.models.Cinema;
-import com.crown.movieTicketBooking.dtos.requests.CinemaRequest;
+import com.crown.movieTicketBooking.datas.models.Booking;
+import com.crown.movieTicketBooking.datas.models.Movie;
+import com.crown.movieTicketBooking.dtos.requests.*;
 import com.crown.movieTicketBooking.dtos.responses.CinemaResponse;
+import com.crown.movieTicketBooking.dtos.responses.CreateShowResponse;
 import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-
-import static org.hamcrest.CoreMatchers.hasItems;
-import static org.hamcrest.collection.IsIterableContainingInAnyOrder.containsInAnyOrder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-
-import java.util.List;
-import java.util.Set;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -22,18 +19,88 @@ class CinemaServiceImplTest {
     CinemaService cinemaService;
     @Autowired
     MovieService movieService;
+    @Autowired
+    BookingService bookingService;
+    BookingRequest bookingRequest;
+    CreateCinemaRequest cinemaRequest;
+    MovieRequest movieRequest;
+    MovieRequest movieRequest2;
+    Movie movie;
+    Movie movie2;
+
+
+    @BeforeEach
+    void setUp(){
+        createCinema();
+        movieRequest = MovieRequest.builder().title("Coming to America")
+                .genres("Thriller,Comedy").languages("English,French,Spanish").build();
+        movieRequest2 = MovieRequest.builder().title("Blood sisters")
+                .genres("Drama,Thriller,Action").languages("English").build();
+
+        movie = movieService.createMovie(movieRequest);
+        movie2 = movieService.createMovie(movieRequest2);
+    }
 @Test
     void cinemaCanBeCreatedTest(){
-    CinemaRequest cinemaRequest = CinemaRequest.builder().name("360Views").city("Lagos").cinemaHallName("Hall 1")
-            .cinemaHallCapacity(100).date("2022-11-21").languages("English,French").title("Only One")
-            .genres("Thriller,Drama,Action").startTime("10:30:00").endTime("12:00:00").price(2320.50).build();
+
     CinemaResponse cinemaResponse = cinemaService.createCinema(cinemaRequest);
-    assertEquals("Cinema successfully created",cinemaResponse.getMessage());
+    assertEquals("Success",cinemaResponse.getMessage());
 }
+
+@Test
+    void cinemaCanAddHall(){
+    CinemaResponse response = cinemaService.createCinema(cinemaRequest);
+    AddHallRequest request = AddHallRequest.builder().name("Hall1").capacity(300).cinemaId(response.getCinemaId()).build();
+    cinemaService.addViewingHall(request);
+    assertEquals(1, cinemaService.hallSize(request.getCinemaId()));
+}
+@Test
+void testThatCinemaCanAddShow(){
+    CinemaResponse response = cinemaService.createCinema(cinemaRequest);
+    AddHallRequest request = AddHallRequest.builder().name("Hall1").capacity(300).cinemaId(response.getCinemaId()).build();
+    cinemaService.addViewingHall(request);
+    CreateShowRequest createShowRequest = CreateShowRequest.builder()
+            .cinemaId(response.getCinemaId())
+            .genres("Tragedy,comedy,action")
+            .languages("english, spanish, french")
+            .date("2002-07-09")
+            .startTime("13:00:00")
+            .endTime("15:30:00")
+            .hallName("Hall1")
+            .movieTitle("Lion King")
+            .price(700.00)
+            .build();
+    CreateShowResponse response1 = cinemaService.createShow(createShowRequest);
+    assertEquals("Show successfully created!", response1.getMessage());
+}
+    @Test
+    void bookingCanBeMadeByUser(){
+        CinemaResponse response = cinemaService.createCinema(cinemaRequest);
+        AddHallRequest request = AddHallRequest.builder().name("Hall1").capacity(300).cinemaId(response.getCinemaId()).build();
+        cinemaService.addViewingHall(request);
+        CreateShowRequest createShowRequest = CreateShowRequest.builder()
+                .cinemaId(response.getCinemaId())
+                .genres("Tragedy,comedy,action")
+                .languages("english, spanish, french")
+                .date("2002-07-09")
+                .startTime("13:00:00")
+                .endTime("15:30:00")
+                .hallName("Hall1")
+                .movieTitle("Lion King")
+                .price(700.00)
+                .build();
+        CreateShowResponse response1 = cinemaService.createShow(createShowRequest);
+        bookingRequest = BookingRequest.builder().userName("Test").email("adeyikjhfdfhuhjgjh11@gmail.com").movieTitle("Lion King").language("english").startTime("13:00:00").date("2022-07-09").cinemaId(response.getCinemaId()).build();
+        Booking booking = bookingService.bookTicket(bookingRequest);
+        assertEquals(booking.getBookingStatus().name(),"SUCCESSFUL");}
 @AfterEach
     void tearDown(){
     cinemaService.deleteAll();
     movieService.deleteAll();
+}
+
+void createCinema(){
+    cinemaRequest = CreateCinemaRequest.builder().name("360Views").city("Lagos").numberOfViewingHalls(3).build();
 }
 
 }

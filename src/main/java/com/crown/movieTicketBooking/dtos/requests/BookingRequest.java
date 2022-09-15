@@ -16,7 +16,6 @@ public class BookingRequest {
     private String movieTitle;
     private String language;
     private String date;
-    private String seatNumber;
     private String startTime;
 
 

@@ -1,57 +1,57 @@
 package com.crown.movieTicketBooking.services;
 
 import com.crown.movieTicketBooking.datas.models.*;
+import com.crown.movieTicketBooking.datas.repositories.BookingRepository;
 import com.crown.movieTicketBooking.datas.repositories.CinemaRepository;
 import com.crown.movieTicketBooking.datas.repositories.ShowRepository;
-import com.crown.movieTicketBooking.datas.repositories.UserRepository;
 import com.crown.movieTicketBooking.dtos.requests.BookingRequest;
 import com.crown.movieTicketBooking.exceptions.MovieTicketBookingException;
-import lombok.Data;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import java.sql.Date;
 import java.time.LocalTime;
-import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
-
+@Service
 public class BookingServiceImpl implements BookingService{
-    @Autowired
-    UserRepository userRepository;
     @Autowired
     CinemaRepository cinemaRepository;
     @Autowired
     ShowRepository showRepository;
+    @Autowired
+    BookingRepository bookingRepository;
     @Override
     public Booking bookTicket(BookingRequest bookingRequest) {
-        if(!validateName(bookingRequest.getUserName())) throw new MovieTicketBookingException("Invalid name");
-        if(!validateEmail(bookingRequest.getEmail())) throw new MovieTicketBookingException("Invalid Email");
+        if (!validateName(bookingRequest.getUserName())) throw new MovieTicketBookingException("Invalid name");
+//        if(!validateEmail(bookingRequest.getEmail())) throw new MovieTicketBookingException("Invalid Email");
 
-        Cinema cinema = cinemaRepository.findById(bookingRequest.getCinemaId()).orElseThrow(()-> new MovieTicketBookingException("Cinema does not exist") );
-        if(cinema.getShowTimes()!=null){
+        Cinema cinema = cinemaRepository.findById(bookingRequest.getCinemaId()).orElseThrow(() -> new MovieTicketBookingException("Cinema does not exist"));
+        if (cinema.getShowTimes() != null) {
             Date date = Date.valueOf(bookingRequest.getDate());
-            List <Show> shows = cinema.getShowTimes().stream()
+            List<Show> shows = cinema.getShowTimes().stream()
                     .filter(show -> show.getDate().equals(date)).collect(Collectors.toList());
 
             LocalTime startTime = LocalTime.parse(bookingRequest.getStartTime());
             var result = shows.stream().filter(show -> show.getStartTime().equals(startTime)).collect(Collectors.toList());
-
+            Show foundShow = result.stream().filter(show -> show.getMovie().getTitle().equals(bookingRequest.getMovieTitle())).
+                    filter(show -> show.getMovie().getLanguage().
+                            contains(bookingRequest.getLanguage())).findFirst().
+                    orElseThrow(() -> new MovieTicketBookingException("Show not available..."));
+            boolean[] seats = foundShow.getCinemaHall().getSeats();
+            if (foundShow.getCinemaHall().getOccupiedSeats() >= foundShow.getCinemaHall().getCapacity()) {
+                throw new MovieTicketBookingException("All seats are occupied");
+            }
+            seats[foundShow.getCinemaHall().getOccupiedSeats()] = true;
+            Booking book = Booking.builder()
+                    .ticketPrice(foundShow.getPrice())
+                    .movieDuration(foundShow.getDuration())
+                    .bookingStatus(Status.SUCCESSFUL)
+                    .show(foundShow)
+                    .build();
+            return bookingRepository.save(book);
         }
-//        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("H:mm:ss");
-//        formatter.parse(bookingRequest.getShowTime());
-//        showRepository.findByDate(formatter.parse(bookingRequest.getShowTime()));
-//        List<Movie> movieList = new ArrayList<>();
-//
-//
-//        List<Movie> searchedMovie = movieList.stream().filter(movie -> movie.getTitle().equals(bookingRequest.getMovieTitle()))
-//                .collect(Collectors.toList());
-//        if(searchedMovie.isEmpty()) throw new MovieTicketBookingException("Movie not available in this Cinema");
-//
-//
-//        Booking booking = new Booking();
-//
-        return null;
+        throw new MovieTicketBookingException("Booking Unsuccessful");
     }
 
     private boolean validateEmail(String email) {

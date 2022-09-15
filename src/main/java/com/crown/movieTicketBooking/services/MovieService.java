@@ -2,7 +2,7 @@ package com.crown.movieTicketBooking.services;
 
 import com.crown.movieTicketBooking.datas.models.Movie;
 import com.crown.movieTicketBooking.dtos.requests.MovieRequest;
-import com.crown.movieTicketBooking.dtos.responses.MovieInformation;
+import com.crown.movieTicketBooking.dtos.responses.MovieInfoResponse;
 
 import java.util.List;
 
@@ -12,9 +12,11 @@ public interface MovieService {
     List<Movie> findMovieByGenre(String genre);
     List<Movie> findMovieByLanguage(String language);
     List<Movie> findMovieByCity(String city);
-    MovieInformation selectMovie(String movieTitle);
+
+    Movie update(Movie movie);
 
     void deleteAll();
 
+    MovieInfoResponse displayCinemasAndShows(String movieTitle);
 }
 

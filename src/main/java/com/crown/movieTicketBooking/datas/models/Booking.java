@@ -1,6 +1,7 @@
 package com.crown.movieTicketBooking.datas.models;
 
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.Id;
@@ -15,21 +16,13 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 @Document("Bookings")
+@Builder
 public class Booking {
     @Id
     private String id;
-    private String cinemaName;
-    private String city;
-    private String cinemaHallName;
-    private int seatNumber;
-    private String movieTitle;
-    private String movieLanguage;
-    private String[] movieGenres;
-    private LocalDate showingDate;
-    private LocalTime startTime;
-    private LocalTime endTime;
-    private double movieDuration;
+    private Show show;
+    private Long movieDuration;
     private Status bookingStatus;
-    private BigDecimal ticketPrice;
+    private double ticketPrice;
 
 }

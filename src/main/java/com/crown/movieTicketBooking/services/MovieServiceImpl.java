@@ -2,11 +2,13 @@ package com.crown.movieTicketBooking.services;
 
 import com.crown.movieTicketBooking.datas.models.Cinema;
 import com.crown.movieTicketBooking.datas.models.Movie;
+import com.crown.movieTicketBooking.datas.models.Show;
 import com.crown.movieTicketBooking.datas.repositories.CinemaRepository;
 import com.crown.movieTicketBooking.datas.repositories.MovieRepository;
 import com.crown.movieTicketBooking.dtos.requests.MovieRequest;
-import com.crown.movieTicketBooking.dtos.responses.MovieInformation;
+import com.crown.movieTicketBooking.dtos.responses.MovieInfoResponse;
 import com.crown.movieTicketBooking.exceptions.MovieTicketBookingException;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -20,6 +22,9 @@ public class MovieServiceImpl implements MovieService{
     MovieRepository movieRepository;
     @Autowired
     CinemaRepository cinemaRepository;
+
+    @Autowired
+    ModelMapper modelMapper;
     @Override
     public Movie createMovie(MovieRequest movieRequest) {
 
@@ -61,13 +66,32 @@ public class MovieServiceImpl implements MovieService{
     }
 
     @Override
-    public MovieInformation selectMovie(String movieTitle) {
-        return null;
-    }
+    public Movie update(Movie movie) {
+        Optional<Movie> optionalMovie = movieRepository.findMovieByTitle(movie.getTitle().toLowerCase());
+        if (optionalMovie.isEmpty())throw new MovieTicketBookingException("Movie does not exist!");
+        Movie foundMovie = optionalMovie.get();
+       Movie mappedMovie = modelMapper.map(foundMovie,Movie.class);
+        System.out.println(mappedMovie.getCinemaList().size());
+       return movieRepository.save(mappedMovie);
 
+
+    }
 
     @Override
     public void deleteAll() {
         movieRepository.deleteAll();
+    }
+
+    @Override
+    public MovieInfoResponse displayCinemasAndShows(String movieTitle) {
+        Movie movie = movieRepository.findMovieByTitle(movieTitle).orElseThrow(() -> new MovieTicketBookingException("Movie not found"));
+        List <Show> shows = new ArrayList<>();
+        for (Cinema cinema : movie.getCinemaList()) {
+            shows.addAll(cinema.getShowTimes());
+        }
+        return MovieInfoResponse.builder()
+                .cinemaList(movie.getCinemaList())
+                .showList(shows)
+                .build();
     }
 }

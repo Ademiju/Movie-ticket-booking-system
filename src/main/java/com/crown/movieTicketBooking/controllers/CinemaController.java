@@ -1,11 +1,12 @@
 package com.crown.movieTicketBooking.controllers;
 
-import com.crown.movieTicketBooking.dtos.requests.CinemaRequest;
+import com.crown.movieTicketBooking.dtos.requests.AddHallRequest;
+import com.crown.movieTicketBooking.dtos.requests.BookingRequest;
+import com.crown.movieTicketBooking.dtos.requests.CreateCinemaRequest;
+import com.crown.movieTicketBooking.dtos.requests.CreateShowRequest;
 import com.crown.movieTicketBooking.dtos.responses.ApiResponse;
 import com.crown.movieTicketBooking.exceptions.MovieTicketBookingException;
-import com.crown.movieTicketBooking.services.CinemaHallService;
 import com.crown.movieTicketBooking.services.CinemaService;
-import org.apache.tomcat.util.json.ParseException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -16,11 +17,41 @@ import org.springframework.web.bind.annotation.*;
 public class CinemaController {
     @Autowired
     private CinemaService cinemaService;
-    @PostMapping("/createCinema/")
+    @PostMapping("/create-cinema/")
 
-    public ResponseEntity<?> createCinema(@RequestBody CinemaRequest cinemaRequest ) {
+    public ResponseEntity<?> createCinema(@RequestBody CreateCinemaRequest cinemaRequest ) {
         try {
             return new ResponseEntity<>(cinemaService.createCinema(cinemaRequest), HttpStatus.CREATED);
+        } catch (MovieTicketBookingException error) {
+            return new ResponseEntity<>(new ApiResponse(false, error.getMessage()), HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @PostMapping("/add-hall/")
+
+    public ResponseEntity<?> addViewingHall(AddHallRequest request) {
+        try {
+            return new ResponseEntity<>(cinemaService.addViewingHall(request), HttpStatus.CREATED);
+        } catch (MovieTicketBookingException error) {
+            return new ResponseEntity<>(new ApiResponse(false, error.getMessage()), HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @PostMapping("/create-show/")
+
+    public ResponseEntity<?> createShow(CreateShowRequest createShowRequest) {
+        try {
+            return new ResponseEntity<>(cinemaService.createShow(createShowRequest), HttpStatus.CREATED);
+        } catch (MovieTicketBookingException error) {
+            return new ResponseEntity<>(new ApiResponse(false, error.getMessage()), HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @PostMapping("/buy-ticket/")
+
+    public ResponseEntity<?> buyMovieTicket(BookingRequest request) {
+        try {
+            return new ResponseEntity<>(cinemaService.buyMovieTicket(request), HttpStatus.CREATED);
         } catch (MovieTicketBookingException error) {
             return new ResponseEntity<>(new ApiResponse(false, error.getMessage()), HttpStatus.BAD_REQUEST);
         }

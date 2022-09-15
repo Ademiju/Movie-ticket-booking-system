@@ -13,14 +13,27 @@ import java.util.*;
 @AllArgsConstructor
 @NoArgsConstructor
 @Document("Cinemas")
+@Builder
 public class Cinema {
     @Id
     private String id;
+
+    public Cinema(String name, String city, int numberOfViewingHalls) {
+        this.name = name;
+        this.city = city;
+        this.numberOfViewingHalls = numberOfViewingHalls;
+        cinemaHalls = new CinemaHall[numberOfViewingHalls];
+        showTimes = new ArrayList<>();
+    }
+
     private String name;
     private String city;
-    private Set<CinemaHall> cinemaHalls;
-    private List<Movie> movieList;
+    private int hallCount;
+    private CinemaHall[] cinemaHalls;
+    private int numberOfViewingHalls;
     private List <Show> showTimes;
+
+
 
 
 }

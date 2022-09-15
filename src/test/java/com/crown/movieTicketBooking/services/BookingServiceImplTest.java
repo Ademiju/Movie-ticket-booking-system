@@ -5,19 +5,18 @@ import com.crown.movieTicketBooking.dtos.requests.BookingRequest;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
 
 import static org.junit.jupiter.api.Assertions.*;
-
+@SpringBootTest
 class BookingServiceImplTest {
-    @Autowired
-    UserService userService;
     @Autowired
     BookingService bookingService;
     BookingRequest bookingRequest;
 
     @BeforeEach
     void setUp() {
-        bookingRequest = BookingRequest.builder().userName("Test").email("test@mail.com").movieTitle("GreyHound").language("English").seatNumber("34").showTime("05:10:00").build();
+        bookingRequest = BookingRequest.builder().userName("Test").email("adeyikjhfdfhuhjgjh11@gmail.com").movieTitle("GreyHound").language("English").startTime("05:10:00").build();
     }
     @Test
     void bookingCanBeMadeByUser(){

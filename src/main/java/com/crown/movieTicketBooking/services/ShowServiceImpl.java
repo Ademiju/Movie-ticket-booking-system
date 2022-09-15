@@ -27,6 +27,7 @@ public class ShowServiceImpl implements ShowService {
         LocalTime endTime = LocalTime.parse(showRequest.getEndTime());
         Date date = Date.valueOf(showRequest.getDate());
         show.setDate(date);
+        show.setPrice(showRequest.getPrice());
         show.setStartTime(startTime);
         show.setEndTime(endTime);
         show.setDuration(MINUTES.between(startTime, endTime));
