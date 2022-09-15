@@ -39,9 +39,19 @@ public class CustomerController {
 
     public ResponseEntity<?> findMovieByGenre(@PathVariable String genre) {
         try {
-            return new ResponseEntity<>(movieService.findMovieByTitle(genre), HttpStatus.CREATED);
+            return new ResponseEntity<>(movieService.findMovieByGenre(genre), HttpStatus.CREATED);
         } catch (MovieTicketBookingException error) {
             return new ResponseEntity<>(new ApiResponse(false, error.getMessage()), HttpStatus.BAD_REQUEST);
         }
     }
+    @GetMapping("/find-by-city/{city}")
+
+    public ResponseEntity<?> findMovieByCitye(@PathVariable String city) {
+        try {
+            return new ResponseEntity<>(movieService.findMovieByCity(city), HttpStatus.CREATED);
+        } catch (MovieTicketBookingException error) {
+            return new ResponseEntity<>(new ApiResponse(false, error.getMessage()), HttpStatus.BAD_REQUEST);
+        }
+    }
+
 }

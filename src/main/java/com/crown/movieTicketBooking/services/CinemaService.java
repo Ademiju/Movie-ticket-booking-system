@@ -14,7 +14,7 @@ import java.util.Set;
 
 public interface CinemaService {
     CinemaResponse createCinema(CreateCinemaRequest cinemaRequest);
-    Set<String> findAllCinema();
+    Set<String> findAllCityWithCinema();
     void deleteAll();
     AddHallResponse addViewingHall(AddHallRequest request);
 

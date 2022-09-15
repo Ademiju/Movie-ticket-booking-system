@@ -26,6 +26,15 @@ public class CinemaController {
             return new ResponseEntity<>(new ApiResponse(false, error.getMessage()), HttpStatus.BAD_REQUEST);
         }
     }
+    @GetMapping("/cities-with-cinema/")
+
+    public ResponseEntity<?> findCityWithCinema() {
+        try {
+            return new ResponseEntity<>(cinemaService.findAllCityWithCinema(), HttpStatus.CREATED);
+        } catch (MovieTicketBookingException error) {
+            return new ResponseEntity<>(new ApiResponse(false, error.getMessage()), HttpStatus.BAD_REQUEST);
+        }
+    }
 
     @PostMapping("/add-hall/")
 
