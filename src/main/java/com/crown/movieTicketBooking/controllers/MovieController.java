@@ -2,7 +2,6 @@ package com.crown.movieTicketBooking.controllers;
 
 import com.crown.movieTicketBooking.dtos.requests.MovieRequest;
 import com.crown.movieTicketBooking.dtos.responses.ApiResponse;
-import com.crown.movieTicketBooking.dtos.responses.MovieInfoResponse;
 import com.crown.movieTicketBooking.exceptions.MovieTicketBookingException;
 import com.crown.movieTicketBooking.services.MovieService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,16 +35,45 @@ public class MovieController {
             return new ResponseEntity<>(new ApiResponse(false, error.getMessage()), HttpStatus.BAD_REQUEST);
         }
     }
+    @GetMapping("/find-by-title/{movieTitle}")
 
-
-    @PatchMapping("/update-movie")
-
-    public ResponseEntity<?> updateMovie(@RequestBody MovieRequest movieRequest) {
+    public ResponseEntity<?> findMovieByTitle(@PathVariable String movieTitle) {
         try {
-            return new ResponseEntity<>(movieService.createMovie(movieRequest), HttpStatus.CREATED);
+            return new ResponseEntity<>(movieService.findMovieByTitle(movieTitle), HttpStatus.CREATED);
         } catch (MovieTicketBookingException error) {
             return new ResponseEntity<>(new ApiResponse(false, error.getMessage()), HttpStatus.BAD_REQUEST);
         }
     }
+
+    @GetMapping("/find-by-lang/{language}")
+
+    public ResponseEntity<?> findMovieByLanguage(@PathVariable String language) {
+        try {
+            return new ResponseEntity<>(movieService.findMovieByLanguage(language), HttpStatus.CREATED);
+        } catch (MovieTicketBookingException error) {
+            return new ResponseEntity<>(new ApiResponse(false, error.getMessage()), HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @GetMapping("/find-by-genre/{genre}")
+
+    public ResponseEntity<?> findMovieByGenre(@PathVariable String genre) {
+        try {
+            return new ResponseEntity<>(movieService.findMovieByGenre(genre), HttpStatus.CREATED);
+        } catch (MovieTicketBookingException error) {
+            return new ResponseEntity<>(new ApiResponse(false, error.getMessage()), HttpStatus.BAD_REQUEST);
+        }
+    }
+    @GetMapping("/find-by-city/{city}")
+
+    public ResponseEntity<?> findMovieByCity(@PathVariable String city) {
+        try {
+            return new ResponseEntity<>(movieService.findMovieByCity(city), HttpStatus.CREATED);
+        } catch (MovieTicketBookingException error) {
+            return new ResponseEntity<>(new ApiResponse(false, error.getMessage()), HttpStatus.BAD_REQUEST);
+        }
+    }
+
+
 
 }

@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.*;
 public class CinemaController {
     @Autowired
     private CinemaService cinemaService;
+
     @PostMapping("/create-cinema/")
 
     public ResponseEntity<?> createCinema(@RequestBody CreateCinemaRequest cinemaRequest ) {
@@ -55,15 +56,4 @@ public class CinemaController {
             return new ResponseEntity<>(new ApiResponse(false, error.getMessage()), HttpStatus.BAD_REQUEST);
         }
     }
-
-    @PostMapping("/buy-ticket/")
-
-    public ResponseEntity<?> buyMovieTicket(@RequestBody BookingRequest request) {
-        try {
-            return new ResponseEntity<>(cinemaService.buyMovieTicket(request), HttpStatus.CREATED);
-        } catch (MovieTicketBookingException error) {
-            return new ResponseEntity<>(new ApiResponse(false, error.getMessage()), HttpStatus.BAD_REQUEST);
-        }
-    }
-
 }

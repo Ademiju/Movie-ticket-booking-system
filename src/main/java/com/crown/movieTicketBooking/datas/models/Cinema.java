@@ -24,6 +24,7 @@ public class Cinema {
     private int numberOfViewingHalls;
     private List <Show> showTimes;
 
+
     public Cinema(String name, String city, int numberOfViewingHalls) {
         this.name = name;
         this.city = city;

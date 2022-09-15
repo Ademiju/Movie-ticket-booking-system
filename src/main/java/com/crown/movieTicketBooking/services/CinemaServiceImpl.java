@@ -27,6 +27,8 @@ public class CinemaServiceImpl implements CinemaService {
     ShowService showService;
     @Autowired
     BookingService bookingService;
+    @Autowired
+    MovieRepository movieRepository;
 
     @Override
     public CinemaResponse createCinema(CreateCinemaRequest cinemaRequest) {
@@ -90,8 +92,14 @@ public class CinemaServiceImpl implements CinemaService {
                 orElseThrow(()-> new MovieTicketBookingException("Hall name not found!"));
         Movie savedMovie = movieService.findMovieByTitle(createShowRequest.getMovieTitle());
         Show createdShow = buildShowRequest(createShowRequest, hall, savedMovie);
+        if(cinema.getShowTimes().stream().anyMatch(show -> show.getMovie().getTitle().equals(createdShow.getMovie().getTitle())
+                && show.getCinemaHall().equals(createdShow.getCinemaHall())
+                && show.getStartTime().equals(createdShow.getStartTime())))
+            throw new MovieTicketBookingException("Show already exist, add a new show");
         cinema.getShowTimes().add(createdShow);
-        cinemaRepository.save(cinema);
+        Cinema savedCinema = cinemaRepository.save(cinema);
+        savedMovie.getCinemaList().add(savedCinema);
+        movieRepository.save(savedMovie);
         return CreateShowResponse.builder()
                 .message("Show successfully created!")
                 .build();
@@ -112,15 +120,6 @@ public class CinemaServiceImpl implements CinemaService {
                 .build();
         return showService.createShow(showRequest);
     }
-
-//    private Movie buildMovieRequest(CreateShowRequest createShowRequest) {
-//        MovieRequest movieRequest = MovieRequest.builder()
-//                .title(createShowRequest.getMovieTitle())
-//                .genres(createShowRequest.getGenres())
-//                .languages(createShowRequest.getLanguages())
-//                .build();
-//        return movieService.createMovie(movieRequest);
-//    }
 
     @Override
     public void deleteAll() {

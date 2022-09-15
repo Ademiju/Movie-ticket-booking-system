@@ -23,6 +23,7 @@ public class ShowServiceImpl implements ShowService {
         Show show = new Show();
         show.setMovie(showRequest.getMovie());
         show.setCinemaHall(showRequest.getCinemaHall());
+
         LocalTime startTime = LocalTime.parse(showRequest.getStartTime());
         LocalTime endTime = LocalTime.parse(showRequest.getEndTime());
         Date date = Date.valueOf(showRequest.getDate());

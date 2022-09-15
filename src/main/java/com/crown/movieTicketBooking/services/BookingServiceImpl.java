@@ -33,8 +33,8 @@ public class BookingServiceImpl implements BookingService{
                     .filter(show -> show.getDate().equals(date)).collect(Collectors.toList());
 
             LocalTime startTime = LocalTime.parse(bookingRequest.getStartTime());
-            var result = shows.stream().filter(show -> show.getStartTime().equals(startTime)).collect(Collectors.toList());
-            Show foundShow = result.stream().filter(show -> show.getMovie().getTitle().equals(bookingRequest.getMovieTitle())).
+            List<Show> showList = shows.stream().filter(show -> show.getStartTime().equals(startTime)).collect(Collectors.toList());
+            Show foundShow = showList.stream().filter(show -> show.getMovie().getTitle().equals(bookingRequest.getMovieTitle())).
                     filter(show -> show.getMovie().getLanguage().
                             contains(bookingRequest.getLanguage())).findFirst().
                     orElseThrow(() -> new MovieTicketBookingException("Show not available..."));
