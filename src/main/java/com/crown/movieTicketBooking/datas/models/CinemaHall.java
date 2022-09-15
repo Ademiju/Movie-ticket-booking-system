@@ -9,8 +9,6 @@ import org.springframework.data.annotation.Id;
 @AllArgsConstructor
 @NoArgsConstructor
 public class CinemaHall {
-    @Id
-    private String id;
     private String name;
     private int capacity;
     private boolean[] seats;

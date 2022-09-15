@@ -17,6 +17,12 @@ import java.util.*;
 public class Cinema {
     @Id
     private String id;
+    private String name;
+    private String city;
+    private int hallCount;
+    private CinemaHall[] cinemaHalls;
+    private int numberOfViewingHalls;
+    private List <Show> showTimes;
 
     public Cinema(String name, String city, int numberOfViewingHalls) {
         this.name = name;
@@ -25,13 +31,6 @@ public class Cinema {
         cinemaHalls = new CinemaHall[numberOfViewingHalls];
         showTimes = new ArrayList<>();
     }
-
-    private String name;
-    private String city;
-    private int hallCount;
-    private CinemaHall[] cinemaHalls;
-    private int numberOfViewingHalls;
-    private List <Show> showTimes;
 
 
 

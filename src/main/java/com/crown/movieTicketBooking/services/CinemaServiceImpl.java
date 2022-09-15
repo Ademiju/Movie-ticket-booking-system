@@ -7,6 +7,7 @@ import com.crown.movieTicketBooking.dtos.responses.AddHallResponse;
 import com.crown.movieTicketBooking.dtos.responses.CinemaResponse;
 import com.crown.movieTicketBooking.dtos.responses.CreateShowResponse;
 import com.crown.movieTicketBooking.exceptions.MovieTicketBookingException;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -14,9 +15,12 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
+@Slf4j
 public class CinemaServiceImpl implements CinemaService {
     @Autowired
     CinemaRepository cinemaRepository;
+    @Autowired
+    CinemaHallRepository cinemaHallRepository;
     @Autowired
     MovieService movieService;
     @Autowired
@@ -45,9 +49,17 @@ public class CinemaServiceImpl implements CinemaService {
 
     @Override
     public AddHallResponse addViewingHall(AddHallRequest request) {
+
     Cinema cinema = cinemaRepository.findById(request.getCinemaId()).orElseThrow(()-> new MovieTicketBookingException("Cinema not found!"));
     if(hallSize(request.getCinemaId()) >= cinema.getNumberOfViewingHalls()){
         throw  new MovieTicketBookingException("Hall capacity cannot be exceeded!");
+    }
+    if(cinema.getCinemaHalls()[0] != null) {
+        CinemaHall[] halls = cinema.getCinemaHalls();
+        CinemaHall[] availableCinemaHalls = Arrays.copyOfRange(halls,0,cinema.getHallCount());
+        Optional<CinemaHall> optionalCinemaHall = Arrays.stream(availableCinemaHalls).toList()
+                .stream().filter(availableCinemaHall -> availableCinemaHall.getName().equals(request.getName())).findFirst();
+        if(optionalCinemaHall.isPresent()) throw new MovieTicketBookingException("Hall name already exist");
     }
         CinemaHall cinemaHall = new CinemaHall(request.getName(), request.getCapacity());
         CinemaHall[] halls = cinema.getCinemaHalls();
@@ -56,10 +68,10 @@ public class CinemaServiceImpl implements CinemaService {
         cinema.setHallCount(cinema.getHallCount() + 1);
 
         Cinema updatedCinema = cinemaRepository.save(cinema);
-
          return AddHallResponse.builder()
-                .name(updatedCinema.getName())
-                .message("Hall added")
+                 .cinemaName(updatedCinema.getName())
+                 .hallName(cinemaHall.getName())
+                .message(cinemaHall.getName()+" Hall added to "+updatedCinema.getName())
                 .build();
 
     }

@@ -38,7 +38,7 @@ public class CinemaController {
 
     @PostMapping("/add-hall/")
 
-    public ResponseEntity<?> addViewingHall(AddHallRequest request) {
+    public ResponseEntity<?> addViewingHall(@RequestBody AddHallRequest request) {
         try {
             return new ResponseEntity<>(cinemaService.addViewingHall(request), HttpStatus.CREATED);
         } catch (MovieTicketBookingException error) {
