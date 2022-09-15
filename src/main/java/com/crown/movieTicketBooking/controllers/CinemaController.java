@@ -56,4 +56,15 @@ public class CinemaController {
             return new ResponseEntity<>(new ApiResponse(false, error.getMessage()), HttpStatus.BAD_REQUEST);
         }
     }
+
+    @PostMapping("/book-show/")
+
+    public ResponseEntity<?> bookShow(@RequestBody BookingRequest bookingRequest) {
+        try {
+            return new ResponseEntity<>(cinemaService.buyMovieTicket(bookingRequest), HttpStatus.CREATED);
+        } catch (MovieTicketBookingException error) {
+            return new ResponseEntity<>(new ApiResponse(false, error.getMessage()), HttpStatus.BAD_REQUEST);
+        }
+    }
+
 }
