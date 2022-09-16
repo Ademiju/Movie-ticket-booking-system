@@ -4,6 +4,7 @@ import com.crown.movieTicketBooking.dtos.requests.MovieRequest;
 import com.crown.movieTicketBooking.dtos.responses.ApiResponse;
 import com.crown.movieTicketBooking.exceptions.MovieTicketBookingException;
 import com.crown.movieTicketBooking.services.MovieService;
+import com.mongodb.internal.bulk.UpdateRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -26,18 +27,20 @@ public class MovieController {
     }
 
 
-    @PostMapping("/update-movie/{movieTitle}")
+    @PostMapping("/display-movie")
 
-    public ResponseEntity<?>  displayCinemasAndShows(@PathVariable String movieTitle) {
+    public ResponseEntity<?>  displayCinemasAndShows(@RequestParam String movieTitle) {
         try {
             return new ResponseEntity<>(movieService.displayCinemasAndShows(movieTitle), HttpStatus.CREATED);
         } catch (MovieTicketBookingException error) {
             return new ResponseEntity<>(new ApiResponse(false, error.getMessage()), HttpStatus.BAD_REQUEST);
         }
     }
-    @GetMapping("/find-by-title/{movieTitle}")
 
-    public ResponseEntity<?> findMovieByTitle(@PathVariable String movieTitle) {
+
+    @GetMapping("/find-by-title")
+
+    public ResponseEntity<?> findMovieByTitle(@RequestParam String movieTitle) {
         try {
             return new ResponseEntity<>(movieService.findMovieByTitle(movieTitle), HttpStatus.CREATED);
         } catch (MovieTicketBookingException error) {
@@ -45,9 +48,9 @@ public class MovieController {
         }
     }
 
-    @GetMapping("/find-by-lang/{language}")
+    @GetMapping("/find-by-lang")
 
-    public ResponseEntity<?> findMovieByLanguage(@PathVariable String language) {
+    public ResponseEntity<?> findMovieByLanguage(@RequestParam String language) {
         try {
             return new ResponseEntity<>(movieService.findMovieByLanguage(language), HttpStatus.CREATED);
         } catch (MovieTicketBookingException error) {
@@ -55,18 +58,18 @@ public class MovieController {
         }
     }
 
-    @GetMapping("/find-by-genre/{genre}")
+    @GetMapping("/find-by-genre")
 
-    public ResponseEntity<?> findMovieByGenre(@PathVariable String genre) {
+    public ResponseEntity<?> findMovieByGenre(@RequestParam String genre) {
         try {
             return new ResponseEntity<>(movieService.findMovieByGenre(genre), HttpStatus.CREATED);
         } catch (MovieTicketBookingException error) {
             return new ResponseEntity<>(new ApiResponse(false, error.getMessage()), HttpStatus.BAD_REQUEST);
         }
     }
-    @GetMapping("/find-by-city/{city}")
+    @GetMapping("/find-by-city")
 
-    public ResponseEntity<?> findMovieByCity(@PathVariable String city) {
+    public ResponseEntity<?> findMovieByCity(@RequestParam String city) {
         try {
             return new ResponseEntity<>(movieService.findMovieByCity(city), HttpStatus.CREATED);
         } catch (MovieTicketBookingException error) {
