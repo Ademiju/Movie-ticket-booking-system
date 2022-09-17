@@ -5,13 +5,14 @@ import com.crown.movieTicketBooking.dtos.requests.MovieRequest;
 import com.crown.movieTicketBooking.dtos.responses.MovieInfoResponse;
 
 import java.util.List;
+import java.util.Set;
 
 public interface MovieService {
     Movie createMovie(MovieRequest movieRequest);
     Movie findMovieByTitle(String movieTitle);
     List<Movie> findMovieByGenre(String genre);
     List<Movie> findMovieByLanguage(String language);
-    List<Movie> findMovieByCity(String city);
+    Set<Movie> findMovieByCity(String city);
 
     Movie update(String movieTitle);
 

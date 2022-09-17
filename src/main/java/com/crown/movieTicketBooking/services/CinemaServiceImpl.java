@@ -88,7 +88,7 @@ public class CinemaServiceImpl implements CinemaService {
     public CreateShowResponse createShow(CreateShowRequest createShowRequest) {
         Cinema cinema = cinemaRepository.findById(createShowRequest.getCinemaId()).orElseThrow(()-> new MovieTicketBookingException("Cinema not found!"));
         CinemaHall hall = Arrays.stream(cinema.getCinemaHalls()).
-                filter(x-> x.getName().equals(createShowRequest.getHallName())).findFirst().
+                filter(cinemaHall-> cinemaHall.getName().equals(createShowRequest.getHallName())).findFirst().
                 orElseThrow(()-> new MovieTicketBookingException("Hall name not found!"));
         Movie savedMovie = movieService.findMovieByTitle(createShowRequest.getMovieTitle());
         Show createdShow = buildShowRequest(createShowRequest, hall, savedMovie);

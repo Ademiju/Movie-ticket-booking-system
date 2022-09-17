@@ -59,9 +59,12 @@ public class MovieServiceImpl implements MovieService{
     }
 
     @Override
-    public List<Movie> findMovieByCity(String city) {
+    public Set<Movie> findMovieByCity(String city) {
         List<Cinema> cinemaList = cinemaRepository.findByCity(city.toLowerCase());
         if(cinemaList.isEmpty()) throw new MovieTicketBookingException("No cinema in this city");
+//        Set<Movie>movies = new HashSet<>();
+//        cinemaList.stream().map(Cinema::getShowTimes).forEach(shows -> shows.forEach(Show::getMovie));
+//        return movies;
         return null;
     }
 
@@ -73,7 +76,6 @@ public class MovieServiceImpl implements MovieService{
        Movie mappedMovie = modelMapper.map(foundMovie,Movie.class);
         System.out.println(mappedMovie.getCinemaList().size());
        return movieRepository.save(mappedMovie);
-
 
     }
 
@@ -90,6 +92,7 @@ public class MovieServiceImpl implements MovieService{
             shows.addAll(cinema.getShowTimes());
         }
         return MovieInfoResponse.builder()
+                .movieTitle(movieTitle)
                 .cinemaList(movie.getCinemaList())
                 .showList(shows)
                 .build();

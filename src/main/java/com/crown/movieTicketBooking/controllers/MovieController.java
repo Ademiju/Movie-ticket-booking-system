@@ -27,7 +27,7 @@ public class MovieController {
     }
 
 
-    @PostMapping("/display-movie")
+    @GetMapping("/display-movie")
 
     public ResponseEntity<?>  displayCinemasAndShows(@RequestParam String movieTitle) {
         try {
