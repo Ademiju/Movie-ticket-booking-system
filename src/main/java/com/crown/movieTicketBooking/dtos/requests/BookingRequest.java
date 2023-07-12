@@ -11,7 +11,7 @@ import lombok.NoArgsConstructor;
 @Builder
 public class BookingRequest {
     private String userName;
-    private String cinemaId;
+    private Long cinemaId;
     private String email;
     private String movieTitle;
     private String language;

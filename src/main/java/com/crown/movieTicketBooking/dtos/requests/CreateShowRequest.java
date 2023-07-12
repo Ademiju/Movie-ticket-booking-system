@@ -12,7 +12,7 @@ import java.math.BigDecimal;
 @NoArgsConstructor
 @Builder
 public class CreateShowRequest {
-    private String cinemaId;
+    private Long cinemaId;
     private String movieTitle;
     private String startTime;
     private String endTime;

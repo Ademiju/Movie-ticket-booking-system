@@ -1,7 +1,7 @@
 package com.crown.movieTicketBooking.services;
 
-import com.crown.movieTicketBooking.datas.models.Booking;
-import com.crown.movieTicketBooking.datas.models.Movie;
+//import com.crown.movieTicketBooking.datas.models.Booking;
+//import com.crown.movieTicketBooking.datas.models.Movie;
 import com.crown.movieTicketBooking.dtos.requests.*;
 
 import com.crown.movieTicketBooking.dtos.responses.AddHallResponse;
@@ -16,8 +16,8 @@ public interface CinemaService {
     void deleteAll();
     AddHallResponse addViewingHall(AddHallRequest request);
 
-    int hallSize(String cinemaId);
-    CreateShowResponse createShow(CreateShowRequest createShowRequest);
-    Booking buyMovieTicket(BookingRequest request);
+    int hallSize(Long cinemaId);
+//    CreateShowResponse createShow(CreateShowRequest createShowRequest);
+//    Booking buyMovieTicket(BookingRequest request);
 }
 

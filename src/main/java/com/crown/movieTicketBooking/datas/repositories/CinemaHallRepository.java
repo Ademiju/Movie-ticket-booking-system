@@ -1,10 +1,10 @@
 package com.crown.movieTicketBooking.datas.repositories;
 
 import com.crown.movieTicketBooking.datas.models.CinemaHall;
-import org.springframework.data.mongodb.repository.MongoRepository;
+import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.Optional;
 
-public interface CinemaHallRepository extends MongoRepository<CinemaHall, String> {
-    Optional<CinemaHall> findCinemaHallByName(String name);
+public interface CinemaHallRepository extends JpaRepository<CinemaHall, Long> {
+    Optional<CinemaHall> findByName(String name);
 }

@@ -1,16 +1,21 @@
 package com.crown.movieTicketBooking.datas.models;
 
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.springframework.data.annotation.Id;
 
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
+@Entity
 public class CinemaHall {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
     private String name;
     private int capacity;
+    @Transient
     private boolean[] seats;
     private int occupiedSeats;
 

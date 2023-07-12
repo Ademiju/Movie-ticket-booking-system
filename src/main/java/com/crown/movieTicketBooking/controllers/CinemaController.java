@@ -15,56 +15,56 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("api/v1/movie-ticket-booking")
 public class CinemaController {
-    @Autowired
-    private CinemaService cinemaService;
+//    @Autowired
+//    private CinemaService cinemaService;
 
-    @PostMapping("/create-cinema/")
+//    @PostMapping("/create-cinema/")
+//
+//    public ResponseEntity<?> createCinema(@RequestBody CreateCinemaRequest cinemaRequest ) {
+//        try {
+//            return new ResponseEntity<>(cinemaService.createCinema(cinemaRequest), HttpStatus.CREATED);
+//        } catch (MovieTicketBookingException error) {
+//            return new ResponseEntity<>(new ApiResponse(false, error.getMessage()), HttpStatus.BAD_REQUEST);
+//        }
+//    }
+//    @GetMapping("/cities-with-cinema/")
+//
+//    public ResponseEntity<?> findCityWithCinema() {
+//        try {
+//            return new ResponseEntity<>(cinemaService.findAllCityWithCinema(), HttpStatus.CREATED);
+//        } catch (MovieTicketBookingException error) {
+//            return new ResponseEntity<>(new ApiResponse(false, error.getMessage()), HttpStatus.BAD_REQUEST);
+//        }
+//    }
 
-    public ResponseEntity<?> createCinema(@RequestBody CreateCinemaRequest cinemaRequest ) {
-        try {
-            return new ResponseEntity<>(cinemaService.createCinema(cinemaRequest), HttpStatus.CREATED);
-        } catch (MovieTicketBookingException error) {
-            return new ResponseEntity<>(new ApiResponse(false, error.getMessage()), HttpStatus.BAD_REQUEST);
-        }
-    }
-    @GetMapping("/cities-with-cinema/")
+//    @PostMapping("/add-hall/")
+//
+//    public ResponseEntity<?> addViewingHall(@RequestBody AddHallRequest request) {
+//        try {
+//            return new ResponseEntity<>(cinemaService.addViewingHall(request), HttpStatus.CREATED);
+//        } catch (MovieTicketBookingException error) {
+//            return new ResponseEntity<>(new ApiResponse(false, error.getMessage()), HttpStatus.BAD_REQUEST);
+//        }
+//    }
 
-    public ResponseEntity<?> findCityWithCinema() {
-        try {
-            return new ResponseEntity<>(cinemaService.findAllCityWithCinema(), HttpStatus.CREATED);
-        } catch (MovieTicketBookingException error) {
-            return new ResponseEntity<>(new ApiResponse(false, error.getMessage()), HttpStatus.BAD_REQUEST);
-        }
-    }
+//    @PostMapping("/create-show/")
+//
+//    public ResponseEntity<?> createShow(@RequestBody CreateShowRequest createShowRequest) {
+//        try {
+//            return new ResponseEntity<>(cinemaService.createShow(createShowRequest), HttpStatus.CREATED);
+//        } catch (MovieTicketBookingException error) {
+//            return new ResponseEntity<>(new ApiResponse(false, error.getMessage()), HttpStatus.BAD_REQUEST);
+//        }
+//    }
 
-    @PostMapping("/add-hall/")
-
-    public ResponseEntity<?> addViewingHall(@RequestBody AddHallRequest request) {
-        try {
-            return new ResponseEntity<>(cinemaService.addViewingHall(request), HttpStatus.CREATED);
-        } catch (MovieTicketBookingException error) {
-            return new ResponseEntity<>(new ApiResponse(false, error.getMessage()), HttpStatus.BAD_REQUEST);
-        }
-    }
-
-    @PostMapping("/create-show/")
-
-    public ResponseEntity<?> createShow(@RequestBody CreateShowRequest createShowRequest) {
-        try {
-            return new ResponseEntity<>(cinemaService.createShow(createShowRequest), HttpStatus.CREATED);
-        } catch (MovieTicketBookingException error) {
-            return new ResponseEntity<>(new ApiResponse(false, error.getMessage()), HttpStatus.BAD_REQUEST);
-        }
-    }
-
-    @PostMapping("/book-show/")
-
-    public ResponseEntity<?> bookShow(@RequestBody BookingRequest bookingRequest) {
-        try {
-            return new ResponseEntity<>(cinemaService.buyMovieTicket(bookingRequest), HttpStatus.CREATED);
-        } catch (MovieTicketBookingException error) {
-            return new ResponseEntity<>(new ApiResponse(false, error.getMessage()), HttpStatus.BAD_REQUEST);
-        }
-    }
+//    @PostMapping("/book-show/")
+//
+//    public ResponseEntity<?> bookShow(@RequestBody BookingRequest bookingRequest) {
+//        try {
+//            return new ResponseEntity<>(cinemaService.buyMovieTicket(bookingRequest), HttpStatus.CREATED);
+//        } catch (MovieTicketBookingException error) {
+//            return new ResponseEntity<>(new ApiResponse(false, error.getMessage()), HttpStatus.BAD_REQUEST);
+//        }
+//    }
 
 }

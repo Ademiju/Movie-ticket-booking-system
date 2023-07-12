@@ -10,7 +10,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Builder
 public class AddHallRequest {
-    public String cinemaId;
+    public Long cinemaId;
     private String name;
     private int capacity;
 }
