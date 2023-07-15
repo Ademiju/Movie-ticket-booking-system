@@ -1,5 +1,6 @@
 package com.crown.movieTicketBooking.services;
 
+import com.crown.movieTicketBooking.datas.models.Role;
 import com.crown.movieTicketBooking.datas.models.User;
 import com.crown.movieTicketBooking.datas.models.VerificationToken;
 import com.crown.movieTicketBooking.datas.repositories.UserRepository;
@@ -38,7 +39,7 @@ public class UserServiceImpl implements UserService {
         if(optionalUser.isPresent()){throw new UserAlreadyExistException("User with email "+registrationRequest.getEmail()+"already exist");}
 
         User user = User.builder().firstName(registrationRequest.getFirstName()).lastName(registrationRequest.getLastName())
-                .email(registrationRequest.getEmail()).password(passwordEncoder.encode(registrationRequest.getPassword())).role("ROLE_USER")
+                .email(registrationRequest.getEmail()).password(passwordEncoder.encode(registrationRequest.getPassword())).role(Role.USER)
                 .build();
         userRepository.save(user);
         return fromUserToUserResponse(user) ;

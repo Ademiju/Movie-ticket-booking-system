@@ -1,29 +1,25 @@
 package com.crown.movieTicketBooking.listeners;
 
 import com.crown.movieTicketBooking.datas.models.User;
+import com.crown.movieTicketBooking.dtos.responses.UserResponse;
 import com.crown.movieTicketBooking.services.UserService;
 import com.crown.movieTicketBooking.services.event.CompleteRegistrationEvent;
-import jakarta.mail.Message;
-import jakarta.mail.MessagingException;
-import jakarta.mail.Session;
-import jakarta.mail.Transport;
-import jakarta.mail.internet.AddressException;
-import jakarta.mail.internet.InternetAddress;
-import jakarta.mail.internet.MimeMessage;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.ApplicationListener;
+import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Component;
 
 
-import java.util.Properties;
 import java.util.UUID;
 
 @Component
 public class CompleteRegistrationListener implements ApplicationListener<CompleteRegistrationEvent> {
-
+    private UserResponse userResponse;
     Logger logger = LoggerFactory.getLogger(this.getClass());
 
     @Autowired
@@ -32,9 +28,19 @@ public class CompleteRegistrationListener implements ApplicationListener<Complet
     @Autowired
     JavaMailSender jms;
 
+    @Value("${email_subject}")
+    String EMAIL_SUBJECT;
+    @Value("${verification_email_content}")
+    String EMAIL_CONTENT;
+    @Value("${email_sender_name}")
+    String SENDER_NAME;
+//    @Value("${email_sender_address}")
+//    String SENDER_EMAIL;
+
     @Override
     public void onApplicationEvent(CompleteRegistrationEvent event) {
-        User user = event.getUser();
+        userResponse = event.getUserResponse();
+        User user = fromUserResponseToUser(userResponse);
         //Generate verification token
         String verificationToken = UUID.randomUUID().toString();
         //Save token to the database
@@ -45,48 +51,20 @@ public class CompleteRegistrationListener implements ApplicationListener<Complet
         logger.info("Click link below to verify email : {}", url);
 
     }
-    public void sendVerificationEmail(String url){
-        String subject = "EMAIL VERIFICATION";
-        String sender = "Movie Ticket Booking Service";
-        String content = "";
-        String host = "127.0.0.1";
 
-        // Getting system properties
-        Properties properties = System.getProperties();
+    private User fromUserResponseToUser(UserResponse userResponse) {
+       User user = new User();
+       BeanUtils.copyProperties(userResponse,user);
+       return user;
+    }
 
-        // Setting up mail server
-        properties.setProperty("mail.smtp.host", host);
-
-        // creating session object to get properties
-        Session session = Session.getDefaultInstance(properties);
-
-        try
-        {
-            // MimeMessage object.
-            MimeMessage message = new MimeMessage(session);
-
-            // Set From Field: adding senders email to from field.
-            message.setFrom(new InternetAddress(sender));
-
-            // Set To Field: adding recipient's email to from field.
-            message.addRecipient(Message.RecipientType.TO, new InternetAddress(recipient));
-
-            // Set Subject: subject of the email
-            message.setSubject(subject  );
-
-            // set body of the email.
-            message.setContent("<h1>This is a HTML text</h1>","text/html");
-
-            // Send email.
-             Transport.send(message);
-            System.out.println("Mail successfully sent");
-        }
-        catch (MessagingException mex)
-        {
-            mex.printStackTrace();
-        } catch (MessagingException e) {
-            e.printStackTrace();
-        }
-
+    public void sendVerificationEmail(String url) {
+        String content = String.format(EMAIL_CONTENT, userResponse.getFirstName(), url);
+        SimpleMailMessage mailMessage = new SimpleMailMessage();
+        mailMessage.setTo(userResponse.getEmail());
+        mailMessage.setFrom(SENDER_NAME);
+        mailMessage.setSubject(EMAIL_SUBJECT);
+        mailMessage.setText(content);
+        jms.send(mailMessage);
     }
 }
